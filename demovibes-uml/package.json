@@ -1,0 +1,13 @@
+{
+  "name": "demovibes-uml",
+  "version": "1.0.0",
+  "description": "Some class diagrams for demovibes",
+  "scripts": {
+    "puml": "puml generate cvgm.puml -o cvgm.png"
+  },
+  "author": "Allan Taschini <allan.taschini@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "node-plantuml-latest": "^1.0.1"
+  }
+}

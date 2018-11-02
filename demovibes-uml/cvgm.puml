@@ -1,0 +1,65 @@
+@startuml
+
+class SongMetaData {
+  user : User
+  added : dateTime
+  song : Song
+  active : boolean
+  checked : boolean
+  artists : Artist
+  groups : Group
+  info : text
+  labels : Label
+  platform : SongPlatform
+  release_year : char
+  type : SongType
+  remix_of_id : integer
+  ytvidid : char
+  ytvidoffset : positive_integer
+  pouetid : integer
+  comment : text
+}
+
+class SongType {
+  title : char
+  description : text
+  symbol : image
+  image: image
+}
+
+class Song {
+  added : dateTime
+  bitrate : integer
+  explicit : boolean
+  file : file
+  last_changed : dateTime
+  locked_until : dateTime
+  loopfade_time : positive_integer
+  playback_fadeout : boolean
+  playback_bass_mode : char
+  playback_bass_inter : char
+  playback_bass_mix : char
+  playback_bass_ramp : char
+  num_favorited : integer
+  rating : float
+  rating_total : integer
+  rating_votes : integer
+  replay_gain : float
+  samplerate : integer
+  song_length : integer
+  startswith : char
+  status : char
+  times_played : integer
+  title : char
+  uploader : User
+  pouetlink : char
+  pouetss : char
+  pouetgroup : char
+  pouettitle : char
+  license : SongLicense
+}
+
+SongMetaData "1" --> "1" Song
+SongMetaData "1" --> "1" SongType
+
+@enduml

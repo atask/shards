@@ -1,0 +1,13 @@
+{
+  "name": "demovibes-dump",
+  "version": "0.0.1",
+  "description": "script collection for dumping scenemusic.net from the Internet Archive",
+  "author": "Allan Taschini <allan.taschini@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "debug": "^3.1.0",
+    "dotenv": "^6.0.0",
+    "node-fetch": "^2.1.2",
+    "tunnel": "0.0.5"
+  }
+}

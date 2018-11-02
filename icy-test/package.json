@@ -1,0 +1,14 @@
+{
+  "name": "icy-test",
+  "version": "1.0.0",
+  "description": "icy & icy-rip usage tests",
+  "dependencies": {
+    "icy": "^2.1.0",
+    "icy-rip": "^0.8.20",
+    "lame": "^1.2.4",
+    "speaker": "^0.4.1",
+    "tunnel": "^0.0.5"
+  },
+  "author": "Allan Taschini <allan.taschini@gmail.com>",
+  "license": "MIT"
+}
