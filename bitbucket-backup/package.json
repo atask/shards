@@ -1,0 +1,21 @@
+{
+  "name": "bitbucket-backup",
+  "version": "0.0.1",
+  "description": "Download project descriptors from Bitbucket.org",
+  "main": "getProjects.js",
+  "scripts": {
+    "get": "node getProjects.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "8.0.0",
+    "line-reader": "0.4.0",
+    "node-fetch": "2.6.0",
+    "shelljs": "0.8.3",
+    "tunnel": "0.0.6"
+  },
+  "devDependencies": {
+    "standard": "12.0.1"
+  }
+}
