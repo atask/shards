@@ -89,7 +89,7 @@ async function getProjects () {
     
     await fsPromises.appendFile(
       workFileName,
-      `node init.js ${projFileName} 2>&1 | tee log-${projectName}.md`
+      `node init.js ${projFileName} 2>&1 | tee log-${projectName}.md${EOL}`
     )
   }
 }
