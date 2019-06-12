@@ -5,7 +5,7 @@ const path = require('path')
 
 const [ , , ...args ] = process.argv
 dotenv.config()
-const { workspace, backupDir } = process.env
+const { workspace } = process.env
 const cwd = process.cwd()
 
 shell.cat(args[0])
@@ -19,7 +19,7 @@ shell.cat(args[0])
     shell.echo('-------------------')
     shell.echo('')
 
-    let projectFolder = path.join(cwd, backupDir, `bitbucket-${workspace}-${project}`)
+    let projectFolder = path.join(cwd, `bitbucket-${workspace}`, `bitbucket-${workspace}-${project}`)
     let repoFolder = path.join(projectFolder, name)
     if (!shell.test('-d', repoFolder)) {
       if (!shell.test('-d', projectFolder)) {

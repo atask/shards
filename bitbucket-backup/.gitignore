@@ -1,6 +1,6 @@
 /node_modules
 .env
-/bitbucket-backup
+/bitbucket-*
 repos-*.txt
 *-init-all.sh
 log-*.md
