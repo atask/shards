@@ -72,13 +72,10 @@ async function getProjects () {
 
   for (const [project, repos] of Object.entries(projects)) {
     let projectName = project.toLowerCase()
-    
     let projFileName = `repos-${projectName}.txt`
-    console.log(`Writing ${projFileName}`)
-    
     let workFileName = `${workspace}-init-all.sh`
-    console.log(`Appending ${workFileName}`)
     
+    console.log(`Writing ${projFileName}`)
     await fsPromises.writeFile(
       projFileName,
       repos
@@ -87,6 +84,7 @@ async function getProjects () {
         .concat(EOL)
     )
     
+    console.log(`Appending ${projectName} to ${workFileName}`)
     await fsPromises.appendFile(
       workFileName,
       `node init.js ${projFileName} 2>&1 | tee log-${projectName}.md${EOL}`
