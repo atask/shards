@@ -16,6 +16,6 @@
     "tunnel": "0.0.6"
   },
   "devDependencies": {
-    "standard": "12.0.1"
+    "standard": "13.0.2"
   }
 }
