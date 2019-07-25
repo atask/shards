@@ -28,16 +28,6 @@ async function waitForWADisconnection(page) {
   })
 }
 
-// const CHAT_SELECTOR = '.X7YrQ'
-const CHAT_SELECTOR = 'body'
-async function getChats(page) {
-  return await page.$$eval(CHAT_SELECTOR, getChatDetails);
-}
-
-async function getChatDetails() {
-  console.log('here')
-}
-
 ;(async () => {
   const browser = await puppeteer.launch({
     //args: [ '--proxy-pac-url=http://wpad.example.it/wpad.dat' ],
@@ -61,7 +51,20 @@ async function getChatDetails() {
   await waitForWAConnection(page)
   console.log('connected!')
 
-  let chats = await getChats(page);
+  const CHAT_SELECTOR = '.X7YrQ'
+  const CHAT_TITLE_SELECTOR = '._19RFN'
+  let chatTitleEHs = await page.$$(CHAT_SELECTOR)
+  // let chatTitleHtml = await Promise.all(chatTitleEHs.map(
+  //   async titleHandle => await page.evaluate(title => title.outerHTML, titleHandle)
+  // ));
+  let chatTitleHtml = await Promise.all(chatTitleEHs.map(
+    async titleHandle => await titleHandle.$eval(
+      CHAT_TITLE_SELECTOR,
+      node => node.getAttribute('title')
+    )
+  ));
+
+  console.log("chatTitleHtml", chatTitleHtml)
 
   await waitForWADisconnection(page)
   console.log('disconnected!')
