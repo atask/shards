@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer')
 
-async function waitForWAConnection(page) {
-  const client = page._client
+async function waitForWAConnection(client) {
   return new Promise(resolve => {
     client.on(
       'Network.webSocketFrameReceived',
@@ -14,8 +13,7 @@ async function waitForWAConnection(page) {
   })
 }
 
-async function waitForWADisconnection(page) {
-  const client = page._client
+async function waitForWADisconnection(client) {
   return new Promise(resolve => {
     client.on(
       'Network.webSocketFrameReceived',
@@ -28,6 +26,17 @@ async function waitForWADisconnection(page) {
   })
 }
 
+const CHAT_MESSAGES_SELECTOR = '._1ays2 .FTBzM'
+async function getCount(page) {
+  return await page.$$eval(CHAT_MESSAGES_SELECTOR, a => a.length)
+}
+
+async function scrollUp(page) {
+  await page.$eval(`${CHAT_MESSAGES_SELECTOR}:first-child`, e => {
+    e.scrollIntoView();
+  });
+}
+
 ;(async () => {
   const browser = await puppeteer.launch({
     //args: [ '--proxy-pac-url=http://wpad.example.it/wpad.dat' ],
@@ -36,19 +45,30 @@ async function waitForWADisconnection(page) {
   })
 
   const page = await browser.newPage()
-
-  const client = page._client
+  await page.setViewport({
+    width: 800,
+    height: 3000
+  })
 
   await page.goto(
     'https://web.whatsapp.com/',
     { waitUntil: [ 'load', 'networkidle0' ] }
   )
 
+  // Thought this would help, but pageScaleFactor can only zoom in
+  // const session = await page.target().createCDPSession();
+  // await session.send('Emulation.setPageScaleFactor', {
+  //   pageScaleFactor: 4,
+  // });
+
   const rememberMeSelector = 'input[name="rememberMe"]'
   await page.waitForSelector(rememberMeSelector)
   await page.click(rememberMeSelector)
 
-  await waitForWAConnection(page)
+  const client = await page.target().createCDPSession();
+  await client.send('Network.enable');
+
+  await waitForWAConnection(client)
   console.log('connected!')
 
   const CHAT_SELECTOR = '.X7YrQ'
@@ -57,6 +77,7 @@ async function waitForWADisconnection(page) {
   // let chatTitleHtml = await Promise.all(chatTitleEHs.map(
   //   async titleHandle => await page.evaluate(title => title.outerHTML, titleHandle)
   // ));
+
   let chatTitleHtml = await Promise.all(chatTitleEHs.map(
     async titleHandle => await titleHandle.$eval(
       CHAT_TITLE_SELECTOR,
@@ -64,10 +85,36 @@ async function waitForWADisconnection(page) {
     )
   ));
 
+  const DELAY = 3000;
+  const MAX_NODES = 350;
+
+  await chatTitleEHs[0].click()
+  console.log("Clicked!")
+
+  console.log("pre-waitFor - START")
+  await page.waitFor(DELAY);
+  console.log("pre-waitFor - END")
+  
+  let preCount = 0;
+  let postCount = 0;
+  do {
+    preCount = await getCount(page);
+    console.log("scrollUp - START")
+    await scrollUp(page);
+    console.log("scrollUp - START")
+    console.log("waitFor - START")
+    await page.waitFor(DELAY);
+    console.log("waitFor - END")
+    postCount = await getCount(page);
+    console.log(`count [ pre: ${preCount}, post: ${postCount} ]`)
+  } while (postCount > preCount && postCount < MAX_NODES);
+
   console.log("chatTitleHtml", chatTitleHtml)
 
-  await waitForWADisconnection(page)
+  await waitForWADisconnection(client)
   console.log('disconnected!')
+  
+  await client.detach()
   await browser.close()
 })().catch(e => {
   // Deal with the fact the chain failed
